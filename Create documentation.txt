@@ -1,0 +1,473 @@
+Generate java doc for 2 files that I'll provide you one by one according to : Document all public entries in the specified source code (public properties, variables, functions, and methods). 
+
+The documentation should reside in the source code and follow a built-in language documentation comments syntax (https://www.oracle.com/technical-resources/articles/java/javadoc-tool.html ). 
+
+All essential code components, such as classes, methods, functions, modules, and interfaces, should be documented. 
+
+The documentation should be easy to understand, with clear explanations of the code purpose, functionality, and behavior. 
+
+Documentation should follow a consistent style, structure, and formatting throughout the codebase. 
+
+The documentation should accurately describe the code behavior, functionality, and any limitations or constraints. 
+
+Method, function, and class documentation should include clear descriptions of all parameters, their types, and expected return values. 
+
+When appropriate, the documentation should include examples to help illustrate the usage and expected behavior of the code. 
+ChatGPT
+Of course! Please provide the first source code file, and I will start generating the Java documentation for it according to your specified guidelines. Once we're done with the first file, you can then provide the second file.
+
+
+
+
+User
+package com.softserve.taf.services.placeholder.endpoints;
+
+import io.restassured.response.ValidatableResponse;
+import io.restassured.specification.RequestSpecification;
+import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import com.softserve.taf.models.enums.HttpStatus;
+import com.softserve.taf.models.placeholder.user.UserDto;
+import com.softserve.taf.services.common.AbstractWebEndpoint;
+
+public class UserEndpoint extends AbstractWebEndpoint {
+
+    private static final Logger LOGGER = LogManager.getLogger();
+    private static final String USERS_END = "/users";
+    private static final String USERS_RESOURCE_END = "/users/{userID}";
+
+    public UserEndpoint(RequestSpecification specification) {
+        super(specification);
+    }
+
+    public UserDto create(UserDto userDto) {
+        return create(userDto, HttpStatus.CREATED)
+            .extract().as(UserDto.class);
+    }
+
+    public ValidatableResponse create(UserDto userDto, HttpStatus status) {
+        LOGGER.info("Create new User");
+        return post(
+            this.specification,
+            USERS_END,
+            userDto)
+            .statusCode(status.getCode());
+    }
+
+    public UserDto update(int id, UserDto userDto) {
+        return update(userDto, id, HttpStatus.OK)
+            .extract().as(UserDto.class);
+    }
+
+    public ValidatableResponse update(UserDto userDto, int id, HttpStatus status) {
+        LOGGER.info("Update User by id [{}]", id);
+        return put(
+            this.specification,
+            USERS_RESOURCE_END,
+            userDto,
+            id)
+            .statusCode(status.getCode());
+    }
+
+    public UserDto getById(String id) {
+        return getById(id, HttpStatus.OK)
+            .extract().as(UserDto.class);
+    }
+
+    public ValidatableResponse getById(String id, HttpStatus status) {
+        LOGGER.info("Get User by id [{}]", id);
+        return get(
+            this.specification,
+            USERS_RESOURCE_END,
+            id)
+            .statusCode(status.getCode());
+    }
+
+    public List<UserDto> getAll() {
+        return List.of(getAll(HttpStatus.OK).extract().as(UserDto[].class));
+    }
+
+    public ValidatableResponse getAll(HttpStatus status) {
+        LOGGER.info("Get all Users");
+        ValidatableResponse response = get(this.specification, USERS_END);
+        response.statusCode(status.getCode());
+        return response;
+    }
+
+}
+ChatGPT
+Here's the Java documentation for the provided code:
+
+java
+Copy code
+package com.softserve.taf.services.placeholder.endpoints;
+
+import io.restassured.response.ValidatableResponse;
+import io.restassured.specification.RequestSpecification;
+import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import com.softserve.taf.models.enums.HttpStatus;
+import com.softserve.taf.models.placeholder.user.UserDto;
+import com.softserve.taf.services.common.AbstractWebEndpoint;
+
+/**
+ * This class handles endpoints related to users.
+ */
+public class UserEndpoint extends AbstractWebEndpoint {
+
+    /** Logger instance for logging activities of UserEndpoint. */
+    private static final Logger LOGGER = LogManager.getLogger();
+    
+    /** Endpoint for accessing all users. */
+    private static final String USERS_END = "/users";
+    
+    /** Endpoint for accessing specific user by ID. */
+    private static final String USERS_RESOURCE_END = "/users/{userID}";
+
+    /**
+     * Constructs a UserEndpoint with a given specification.
+     * 
+     * @param specification RequestSpecification instance used for the API call.
+     */
+    public UserEndpoint(RequestSpecification specification) {
+        super(specification);
+    }
+
+    /**
+     * Create a user with provided details.
+     * 
+     * @param userDto Details of the user to be created.
+     * @return UserDto instance representing the created user.
+     */
+    public UserDto create(UserDto userDto) {
+        return create(userDto, HttpStatus.CREATED)
+            .extract().as(UserDto.class);
+    }
+
+    /**
+     * Create a user with provided details and expect a certain HTTP status.
+     * 
+     * @param userDto Details of the user to be created.
+     * @param status Expected HTTP status after user creation.
+     * @return ValidatableResponse instance with response details.
+     */
+    public ValidatableResponse create(UserDto userDto, HttpStatus status) {
+        LOGGER.info("Create new User");
+        return post(
+            this.specification,
+            USERS_END,
+            userDto)
+            .statusCode(status.getCode());
+    }
+
+    /**
+     * Update user details for a specific user ID.
+     * 
+     * @param id ID of the user to be updated.
+     * @param userDto Details of the updated user.
+     * @return UserDto instance representing the updated user.
+     */
+    public UserDto update(int id, UserDto userDto) {
+        return update(userDto, id, HttpStatus.OK)
+            .extract().as(UserDto.class);
+    }
+
+    /**
+     * Update user details for a specific user ID and expect a certain HTTP status.
+     * 
+     * @param userDto Details of the updated user.
+     * @param id ID of the user to be updated.
+     * @param status Expected HTTP status after user update.
+     * @return ValidatableResponse instance with response details.
+     */
+    public ValidatableResponse update(UserDto userDto, int id, HttpStatus status) {
+        LOGGER.info("Update User by id [{}]", id);
+        return put(
+            this.specification,
+            USERS_RESOURCE_END,
+            userDto,
+            id)
+            .statusCode(status.getCode());
+    }
+
+    /**
+     * Retrieve a user by a specific ID.
+     * 
+     * @param id ID of the user to be retrieved.
+     * @return UserDto instance representing the retrieved user.
+     */
+    public UserDto getById(String id) {
+        return getById(id, HttpStatus.OK)
+            .extract().as(UserDto.class);
+    }
+
+    /**
+     * Retrieve a user by a specific ID and expect a certain HTTP status.
+     * 
+     * @param id ID of the user to be retrieved.
+     * @param status Expected HTTP status after user retrieval.
+     * @return ValidatableResponse instance with response details.
+     */
+    public ValidatableResponse getById(String id, HttpStatus status) {
+        LOGGER.info("Get User by id [{}]", id);
+        return get(
+            this.specification,
+            USERS_RESOURCE_END,
+            id)
+            .statusCode(status.getCode());
+    }
+
+    /**
+     * Retrieve all users.
+     * 
+     * @return List of UserDto instances representing all users.
+     */
+    public List<UserDto> getAll() {
+        return List.of(getAll(HttpStatus.OK).extract().as(UserDto[].class));
+    }
+
+    /**
+     * Retrieve all users and expect a certain HTTP status.
+     * 
+     * @param status Expected HTTP status after retrieval.
+     * @return ValidatableResponse instance with response details.
+     */
+    public ValidatableResponse getAll(HttpStatus status) {
+        LOGGER.info("Get all Users");
+        ValidatableResponse response = get(this.specification, USERS_END);
+        response.statusCode(status.getCode());
+        return response;
+    }
+
+}
+The provided JavaDoc annotations offer a comprehensive understanding of the purpose, functionality, and behavior of each method, class, and significant components in the code. Once you're ready, please share the second source code file for documentation.
+
+
+
+
+User
+package com.softserve.taf.services.placeholder.endpoints;
+
+import io.restassured.response.ValidatableResponse;
+import io.restassured.specification.RequestSpecification;
+import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import com.softserve.taf.models.enums.HttpStatus;
+import com.softserve.taf.models.placeholder.comment.CommentDto;
+import com.softserve.taf.services.common.AbstractWebEndpoint;
+
+public class CommentEndpoint extends AbstractWebEndpoint {
+
+    private static final Logger LOGGER = LogManager.getLogger();
+    private static final String COMMENTS_END = "/comments";
+    private static final String COMMENTS_RESOURCE_END = "/comments/{commentID}";
+
+    public CommentEndpoint(RequestSpecification specification) {
+        super(specification);
+    }
+
+    public CommentDto create(CommentDto commentDto) {
+        return create(commentDto, HttpStatus.CREATED)
+            .extract().as(CommentDto.class);
+    }
+
+    public ValidatableResponse create(CommentDto commentDto, HttpStatus status) {
+        LOGGER.info("Create new Comment");
+        return post(
+            this.specification,
+            COMMENTS_END,
+            commentDto)
+            .statusCode(status.getCode());
+    }
+
+    public CommentDto update(int id, CommentDto commentDto) {
+        return update(commentDto, id, HttpStatus.OK)
+            .extract().as(CommentDto.class);
+    }
+
+    public ValidatableResponse update(CommentDto commentDto, int id, HttpStatus status) {
+        LOGGER.info("Update Comment by id [{}]", id);
+        return put(
+            this.specification,
+            COMMENTS_RESOURCE_END,
+            commentDto,
+            id)
+            .statusCode(status.getCode());
+    }
+
+    public CommentDto getById(int id) {
+        return getById(id, HttpStatus.OK)
+            .extract().as(CommentDto.class);
+    }
+
+    public ValidatableResponse getById(int id, HttpStatus status) {
+        LOGGER.info("Get Comment by id [{}]", id);
+        return get(
+            this.specification,
+            COMMENTS_RESOURCE_END,
+            String.valueOf(id))
+            .statusCode(status.getCode());
+    }
+
+    public List<CommentDto> getAll() {
+        return List.of(getAll(HttpStatus.OK).extract().as(CommentDto[].class));
+    }
+
+    public ValidatableResponse getAll(HttpStatus status) {
+        LOGGER.info("Get all Comments");
+        ValidatableResponse response = get(this.specification, COMMENTS_END);
+        response.statusCode(status.getCode());
+        return response;
+    }
+
+
+}
+ChatGPT
+Here's the Java documentation for the provided CommentEndpoint class:
+
+java
+Copy code
+package com.softserve.taf.services.placeholder.endpoints;
+
+import io.restassured.response.ValidatableResponse;
+import io.restassured.specification.RequestSpecification;
+import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import com.softserve.taf.models.enums.HttpStatus;
+import com.softserve.taf.models.placeholder.comment.CommentDto;
+import com.softserve.taf.services.common.AbstractWebEndpoint;
+
+/**
+ * This class handles endpoints related to comments.
+ */
+public class CommentEndpoint extends AbstractWebEndpoint {
+
+    /** Logger instance for logging activities of CommentEndpoint. */
+    private static final Logger LOGGER = LogManager.getLogger();
+    
+    /** Endpoint for accessing all comments. */
+    private static final String COMMENTS_END = "/comments";
+    
+    /** Endpoint for accessing specific comment by ID. */
+    private static final String COMMENTS_RESOURCE_END = "/comments/{commentID}";
+
+    /**
+     * Constructs a CommentEndpoint with a given specification.
+     * 
+     * @param specification RequestSpecification instance used for the API call.
+     */
+    public CommentEndpoint(RequestSpecification specification) {
+        super(specification);
+    }
+
+    /**
+     * Create a comment with provided details.
+     * 
+     * @param commentDto Details of the comment to be created.
+     * @return CommentDto instance representing the created comment.
+     */
+    public CommentDto create(CommentDto commentDto) {
+        return create(commentDto, HttpStatus.CREATED)
+            .extract().as(CommentDto.class);
+    }
+
+    /**
+     * Create a comment with provided details and expect a certain HTTP status.
+     * 
+     * @param commentDto Details of the comment to be created.
+     * @param status Expected HTTP status after comment creation.
+     * @return ValidatableResponse instance with response details.
+     */
+    public ValidatableResponse create(CommentDto commentDto, HttpStatus status) {
+        LOGGER.info("Create new Comment");
+        return post(
+            this.specification,
+            COMMENTS_END,
+            commentDto)
+            .statusCode(status.getCode());
+    }
+
+    /**
+     * Update comment details for a specific comment ID.
+     * 
+     * @param id ID of the comment to be updated.
+     * @param commentDto Details of the updated comment.
+     * @return CommentDto instance representing the updated comment.
+     */
+    public CommentDto update(int id, CommentDto commentDto) {
+        return update(commentDto, id, HttpStatus.OK)
+            .extract().as(CommentDto.class);
+    }
+
+    /**
+     * Update comment details for a specific comment ID and expect a certain HTTP status.
+     * 
+     * @param commentDto Details of the updated comment.
+     * @param id ID of the comment to be updated.
+     * @param status Expected HTTP status after comment update.
+     * @return ValidatableResponse instance with response details.
+     */
+    public ValidatableResponse update(CommentDto commentDto, int id, HttpStatus status) {
+        LOGGER.info("Update Comment by id [{}]", id);
+        return put(
+            this.specification,
+            COMMENTS_RESOURCE_END,
+            commentDto,
+            id)
+            .statusCode(status.getCode());
+    }
+
+    /**
+     * Retrieve a comment by a specific ID.
+     * 
+     * @param id ID of the comment to be retrieved.
+     * @return CommentDto instance representing the retrieved comment.
+     */
+    public CommentDto getById(int id) {
+        return getById(id, HttpStatus.OK)
+            .extract().as(CommentDto.class);
+    }
+
+    /**
+     * Retrieve a comment by a specific ID and expect a certain HTTP status.
+     * 
+     * @param id ID of the comment to be retrieved.
+     * @param status Expected HTTP status after comment retrieval.
+     * @return ValidatableResponse instance with response details.
+     */
+    public ValidatableResponse getById(int id, HttpStatus status) {
+        LOGGER.info("Get Comment by id [{}]", id);
+        return get(
+            this.specification,
+            COMMENTS_RESOURCE_END,
+            String.valueOf(id))
+            .statusCode(status.getCode());
+    }
+
+    /**
+     * Retrieve all comments.
+     * 
+     * @return List of CommentDto instances representing all comments.
+     */
+    public List<CommentDto> getAll() {
+        return List.of(getAll(HttpStatus.OK).extract().as(CommentDto[].class));
+    }
+
+    /**
+     * Retrieve all comments and expect a certain HTTP status.
+     * 
+     * @param status Expected HTTP status after retrieval.
+     * @return ValidatableResponse instance with response details.
+     */
+    public ValidatableResponse getAll(HttpStatus status) {
+        LOGGER.info("Get all Comments");
+        ValidatableResponse response = get(this.specification, COMMENTS_END);
+        response.statusCode(status.getCode());
+        return response;
+    }
+}
+This JavaDoc provides clear explanations and descriptions for the CommentEndpoint class, its methods, parameters, return values, and other significant components, in accordance with the provided guidelines.
